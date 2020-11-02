@@ -3,7 +3,7 @@
 __all__ = ['BSFinder']
 
 # Cell
-from fastai2.basics import *
+from fastai.basics import *
 
 # Cell
 # Linear combination for the moving average
@@ -37,11 +37,11 @@ class BSFinder(Callback):
         num_it : the number of batches you want to process, can be set to None and it will automatically train during one epoch (or n_batch if simulate_multi_gpus is se to True)
         n_batch : the number of batches you want to store before computing the Simple Noise Scale. 20 seems to work well across different tasks.
         beta : the beta parameter for an exponential moving average to compute the sum of variances, and the scale of the gradient. If the plot is too irregular, try increasing to 0.999 or more if needed, or increase the n_batch parameter.
-        simulate_multi_gpus=Simulate that user has n_batch gpus by iterating without updating model weights as original authors had. Setting it to False use DanyWind aproximation that's faster but numerically more inestable and finds a Simple Noise Scale smaller than the original Simple Noise Scale. 
+        simulate_multi_gpus=Simulate that user has n_batch gpus by iterating without updating model weights as original authors had. Setting it to False use DanyWind aproximation that's faster but numerically more inestable and finds a Simple Noise Scale smaller than the original Simple Noise Scale.
         """
-        store_attr(self, 'num_it, n_batch, beta, simulate_multi_gpus')
+        store_attr()
 
-    def begin_fit(self):
+    def before_fit(self):
         # Save original model
         self.learn.save('_tmp')
 
@@ -57,7 +57,7 @@ class BSFinder(Callback):
         self.stats = L()
         self.count=0
 
-    def begin_validate(self): raise CancelValidException()
+    def before_validate(self): raise CancelValidException()
 
     def after_backward(self):
         if self.train_iter >= self.num_it: raise CancelFitException()
@@ -124,10 +124,10 @@ class BSFinder(Callback):
             df.set_index('n_iter', inplace=True)
             self.recorder.bs_find_stats = df
 
-    _docs = {"begin_fit": "Initialize container for search results and auxiliary variables and save the model",
+    _docs = {"before_fit": "Initialize container for search results and auxiliary variables and save the model",
              "after_batch": "Record hyper-parameters of this batch and potentially stop training",
              "after_backward": "Store gradients and compute Simple Noise Scale",
-             "begin_validate": "Skip the validation part of training"}
+             "before_validate": "Skip the validation part of training"}
 
 
 # Cell
