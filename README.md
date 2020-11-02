@@ -9,7 +9,7 @@ This implementation differs on:
 
 However, you could use the DanyWind aproximation by settting simulate_multi_gpus to False. DanyWind aproximation is faster but numerically more inestable and finds a Simple Noise Scale smaller than the original Simple Noise Scale.
 
-It's tested with fastai2 0.0.16. 
+It's tested with fastai 2.1. It should work with fastai>=2.0 
 
 TODO:
 - Port description improvements from [fastai2 PR](https://github.com/fastai/fastai2/pull/296).
